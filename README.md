@@ -32,6 +32,6 @@ O First Financial Box é um plugin WordPress completo para gestão financeira pe
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.9 =
 * Versão inicial completa.
 
