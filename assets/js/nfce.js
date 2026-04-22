@@ -139,18 +139,19 @@ window.nfcePreencherStep2 = function(n) {
     document.getElementById('impChave').value    = n.chave || '';
     document.getElementById('impEmitente').value = (n.emitente && n.emitente.nome) ? n.emitente.nome : '';
     document.getElementById('impProdutosJson').value = JSON.stringify(n.produtos || []);
-    var total = (n.pagamentos && n.pagamentos[0] && n.pagamentos[0].valor)
-                ? n.pagamentos[0].valor
-                : 0;
+    var total = (n.pagamentos && n.pagamentos[0] && n.pagamentos[0].valor) ? n.pagamentos[0].valor : 0;
+    var tipo  = (n.pagamentos && n.pagamentos[0] && n.pagamentos[0].forma) ? n.pagamentos[0].forma : ''; 
     if (total > 0) document.getElementById('impAmount').value = total.toFixed(2);
     document.getElementById('impDate').value = n.data_emissao || new Date().toISOString().slice(0, 10);
     document.getElementById('impDesc').value = 'NFC-e: ' + ((n.emitente && n.emitente.nome) ? n.emitente.nome : 'Emitente');
-
+    // alert(JSON.stringify(n.pagamentos[0].forma) + tipo);
     var info = '';
     if (n.emitente && n.emitente.nome) info += '<div class="mb-1"><strong>' + escHtml(n.emitente.nome) + '</strong></div>';
     if (n.emitente && n.emitente.cnpj) info += '<div class="small text-muted">CNPJ: ' + escHtml(n.emitente.cnpj) + '</div>';
     if (n.data_emissao) info += '<div class="small text-muted">Emiss\u00e3o: ' + escHtml(n.data_emissao) + '</div>';
+    if (tipo) info += '<div class="small text-muted">Tipo de Pagto.: ' + escHtml(tipo) + '</div>';
     if (total > 0) info += '<div class="mt-2 fw-600 ffb-expense">Total: R$ ' + total.toFixed(2).replace('.', ',') + '</div>';
+    
     document.getElementById('infoNotaContent').innerHTML = info || '<small class="text-muted">Dados parciais</small>';
 
     var tbody = document.getElementById('corpoItens');
@@ -194,6 +195,7 @@ window.nfceImportar = function() {
         category_id:   document.getElementById('impCategory').value,
         produtos_json: document.getElementById('impProdutosJson').value,
     };
+        console.log(JSON.stringify(data));
 
     $.post(AJAX_URL, data, function(resp) {
         btn.disabled = false;
